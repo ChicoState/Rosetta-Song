@@ -10,7 +10,9 @@
                 <div class="playlist-item">
                     <input type="checkbox" id="playlist_{{ forloop.counter }}" name="playlist_names" value="{{ playlist.name }}">
                     <label for="playlist_{{ forloop.counter }}">{{ playlist.name }}</label>
-                    <div class="songs">
+                    <!-- button to show the songs on each playlist-->>
+                    <button type="button" onclick="toggleSongsVisibility('songs_{{ forloop.counter }}')" class="toggle-songs-btn">Show/Hide Songs</button>
+                    <div class="songs" id="songs_{{ forloop.counter }}" style="display: none;">
                         {% for song in playlist.tracks %}
                             <div class="song-item">{{ song }}</div>
                         {% endfor %}
@@ -37,13 +39,18 @@
     .playlist-item {
         margin-bottom: 10px;
     }
-    .transfer-button {
+    .transfer-button, .toggle-songs-btn {
         background-color: #4CAF50;
         color: white;
         padding: 10px 20px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+    }
+    .toggle-songs-btn {
+        background-color: #4CAF50; 
+        margin: 5px 0;
+        padding: 3px 3px;
     }
     .songs {
         margin-top: 5px;
@@ -58,4 +65,17 @@
         font-size: 14px;
     }
 </style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+function toggleSongsVisibility(id) {
+    var element = document.getElementById(id);
+    if (element.style.display === 'none') {
+        element.style.display = 'block';
+    } else {
+        element.style.display = 'none';
+    }
+}
+</script>
 {% endblock %}
