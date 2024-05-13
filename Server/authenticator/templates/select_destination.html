@@ -3,8 +3,11 @@
 {% block title %}Select Destination{% endblock %}
 
 {% block content %}
+
 <div class="container">
-    <h2>Select Your Destination</h2>
+    <div class="connect-service" style="margin-top: 40px; text-align: center;">
+        <p>Select your destination:</p>
+    </div>
     
     {% if request.session.source != 'youtube' %}
         <!-- Display YouTube Button if source is Spotify -->
@@ -27,6 +30,10 @@
 {% block style %}
 {{ block.super }}
 <style>
+    body {
+        font-family: Verdana, sans-serif;
+        margin: 0
+    }
     .youtube-button {
         background-image: url('https://cdn.freebiesupply.com/logos/large/2x/youtube-logo-png-transparent.png');
         background-size: contain;
