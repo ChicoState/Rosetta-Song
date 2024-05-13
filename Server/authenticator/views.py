@@ -226,22 +226,16 @@ def transfer_playlists(request):
     """
     if request.method == 'POST':
         source = request.session.get('source')
-
         if source == 'youtube':
             youtube_playlist_id = request.POST.get('youtube_playlist_id')
             youtube_playlist_title=request.POST.get('youtube_playlist_title_' + youtube_playlist_id)
-
             print(f"Attempting to transfer YouTube playlist:{youtube_playlist_title}") #Debug output
-
             youtube_tracks = fetch_youtube_playlist_tracks(request.user, youtube_playlist_id)
             access_token = request.session.get('access_token')
             spotify_user_id = fetch_spotify_user_id(access_token)
-
             spotify_playlist_id = create_spotify_playlist(access_token, spotify_user_id, youtube_playlist_title)
-
             successful_tracks = []
             failed_tracks = []
-
             for track_name in youtube_tracks:
                 spotify_track_id = search_spotify_for_track(access_token, track_name)
                 if spotify_track_id:
@@ -251,7 +245,6 @@ def transfer_playlists(request):
                     add_tracks_to_spotify_playlist(access_token, spotify_playlist_id, [spotify_track_id])
                 else:
                     failed_tracks.append({'name': track_name, 'artist': 'Unknown'})
-
             return render(request, 'transferred.html', {
                 'message': "Transfer Completed",
                 'playlist_name': youtube_playlist_title,
@@ -266,7 +259,9 @@ def transfer_playlists(request):
                 tracks_with_artists=[track.split(',') for track in tracks_string.split('|') if track]
                 tracks = [{'name': track[0], 'artist': track[1] if len(track) > 1 else None} for track in tracks_with_artists]
                 create_yt_playlist(request, playlist_name, tracks)
-            return JsonResponse({'status': 'success'})
+            return render(request, 'transferred.html', {
+                     'message': "Transfer Completed",
+                })
 
 def get_spotify_track_details(access_token, track_id):
     headers = {'Authorization': f'Bearer {access_token}'}
